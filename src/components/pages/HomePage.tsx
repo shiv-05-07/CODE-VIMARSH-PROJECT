@@ -190,7 +190,7 @@ export default function HomePage() {
 
               <AnimatedElement delay={300}>
                 <p className="font-paragraph text-lg sm:text-xl text-white/60 max-w-2xl mb-10 leading-relaxed border-l border-white/10 pl-6">
-                  Where code meets contemplation. We don't just write software; we deliberate on its architecture, its purpose, and its impact.
+                  Where intellectual deliberation shapes exceptional software. We architect solutions through deep discourse, collaborative refinement, and uncompromising technical excellence.
                 </p>
               </AnimatedElement>
 

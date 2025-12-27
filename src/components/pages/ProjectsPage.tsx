@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Folder, ExternalLink } from 'lucide-react';
+import { Folder, Github } from 'lucide-react';
 import Header from '../Header';
 import Footer from '../Footer';
 import { BaseCrudService } from '@/integrations';
@@ -87,44 +87,69 @@ export default function ProjectsPage() {
                 >
                   <Link
                     to={`/projects/${project._id}`}
-                    className="block bg-gray-800/50 rounded-xl overflow-hidden border border-neon-cyan/10 hover:border-neon-cyan/30 transition-all hover:shadow-lg hover:shadow-neon-cyan/10 group h-full"
+                    className="block group h-full"
                   >
-                    {project.projectImage && (
-                      <div className="aspect-video overflow-hidden">
-                        <Image
-                          src={project.projectImage}
-                          alt={project.projectName || 'Project image'}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          width={600}
-                        />
+                    {/* Glassmorphism Card */}
+                    <div className="relative h-full rounded-2xl overflow-hidden backdrop-blur-xl bg-white/10 border border-white/20 hover:border-neon-cyan/50 transition-all duration-300 hover:shadow-2xl hover:shadow-neon-cyan/20">
+                      {/* Image Container with Hover Scale */}
+                      {project.projectImage && (
+                        <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-neon-cyan/10 to-transparent">
+                          <Image
+                            src={project.projectImage}
+                            alt={project.projectName || 'Project image'}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            width={600}
+                          />
+                          {/* Overlay Gradient */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
+                        </div>
+                      )}
+
+                      {/* Content Container */}
+                      <div className="relative p-6 flex flex-col h-full">
+                        {/* GitHub Icon & Tech Tag */}
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            {project.status && (
+                              <span className="inline-block px-3 py-1 rounded-full text-xs font-paragraph font-semibold bg-neon-cyan/20 text-neon-cyan capitalize mb-3">
+                                {project.status}
+                              </span>
+                            )}
+                          </div>
+                          <a
+                            href="#"
+                            onClick={(e) => e.preventDefault()}
+                            className="flex-shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-neon-cyan hover:bg-neon-cyan hover:text-charcoal transition-all duration-300 ml-2"
+                            aria-label="GitHub Repository"
+                          >
+                            <Github className="w-5 h-5" />
+                          </a>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="font-heading text-xl font-bold text-white mb-3 group-hover:text-neon-cyan transition-colors line-clamp-2">
+                          {project.projectName}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="font-paragraph text-sm text-white/70 mb-4 line-clamp-2 flex-grow">
+                          {project.shortDescription}
+                        </p>
+
+                        {/* Tech Stack Tags */}
+                        {project.technologiesUsed && (
+                          <div className="flex flex-wrap gap-2 pt-4 border-t border-white/10">
+                            {project.technologiesUsed.split(',').map((tech, i) => (
+                              <span
+                                key={i}
+                                className="px-3 py-1 bg-white/5 hover:bg-neon-cyan/20 rounded-full text-xs font-paragraph font-medium text-white/80 hover:text-neon-cyan transition-colors"
+                              >
+                                {tech.trim()}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
-                    <div className="p-6">
-                      {project.status && (
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="px-3 py-1 rounded-full text-xs font-paragraph font-semibold bg-neon-cyan/20 text-neon-cyan capitalize">
-                            {project.status}
-                          </span>
-                        </div>
-                      )}
-                      <h3 className="font-heading text-xl font-bold text-white mb-3 group-hover:text-neon-cyan transition-colors">
-                        {project.projectName}
-                      </h3>
-                      <p className="font-paragraph text-sm text-white/70 mb-4 line-clamp-2">
-                        {project.shortDescription}
-                      </p>
-                      {project.technologiesUsed && (
-                        <div className="flex flex-wrap gap-2">
-                          {project.technologiesUsed.split(',').map((tech, i) => (
-                            <span
-                              key={i}
-                              className="px-2 py-1 bg-white/5 rounded text-xs font-mono text-white/60"
-                            >
-                              {tech.trim()}
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </Link>
                 </motion.div>
