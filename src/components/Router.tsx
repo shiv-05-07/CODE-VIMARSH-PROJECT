@@ -9,7 +9,10 @@ import ProjectsPage from '@/components/pages/ProjectsPage';
 import ProjectDetailPage from '@/components/pages/ProjectDetailPage';
 import RoadmapPage from '@/components/pages/RoadmapPage';
 import JoinPage from '@/components/pages/JoinPage';
+import MembersDirectoryPage from '@/components/pages/MembersDirectoryPage';
+import MemberDetailPage from '@/components/pages/MemberDetailPage';
 import NotFoundPage from '@/components/pages/NotFoundPage';
+import { MemberProtectedRoute } from '@/components/ui/member-protected-route';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -54,6 +57,22 @@ const router = createBrowserRouter([
       {
         path: "join",
         element: <JoinPage />,
+      },
+      {
+        path: "members",
+        element: (
+          <MemberProtectedRoute messageToSignIn="Sign in to view the team members directory">
+            <MembersDirectoryPage />
+          </MemberProtectedRoute>
+        ),
+      },
+      {
+        path: "members/:id",
+        element: (
+          <MemberProtectedRoute messageToSignIn="Sign in to view member details">
+            <MemberDetailPage />
+          </MemberProtectedRoute>
+        ),
       },
       {
         path: "*",
