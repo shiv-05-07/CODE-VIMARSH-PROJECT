@@ -8,6 +8,8 @@ import Footer from '../Footer';
 import { Image } from '@/components/ui/image';
 import { BaseCrudService } from '@/integrations';
 import { Events, Projects } from '@/entities';
+import VimarshTerminal from '../VimarshTerminal';
+import LiveStats from '../LiveStats';
 
 // --- Utility Components ---
 
@@ -291,6 +293,11 @@ export default function HomePage() {
             <div className="w-px h-12 bg-gradient-to-b from-neon-cyan to-transparent" />
           </motion.div>
         </section>
+
+        <SectionDivider />
+
+        {/* --- LIVE STATS SECTION --- */}
+        <LiveStats />
 
         <SectionDivider />
 
@@ -588,6 +595,7 @@ export default function HomePage() {
       </main>
 
       <Footer />
+      <VimarshTerminal />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Header from '../Header';
 import Footer from '../Footer';
 import { BaseCrudService } from '@/integrations';
 import { RoadmapMilestones } from '@/entities';
+import CareerTimeline from '../CareerTimeline';
 
 export default function RoadmapPage() {
   const [milestones, setMilestones] = useState<RoadmapMilestones[]>([]);
@@ -194,6 +195,9 @@ export default function RoadmapPage() {
           )}
         </div>
       </section>
+
+      {/* Career Timeline Section */}
+      <CareerTimeline />
 
       <Footer />
     </div>
