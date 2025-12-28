@@ -12,7 +12,6 @@ export default function Header() {
     { path: '/events', label: 'Events' },
     { path: '/projects', label: 'Projects' },
     { path: '/roadmap', label: 'Roadmap' },
-    { path: '/members', label: 'Members' },
     { path: '/join', label: 'Join' },
   ];
 

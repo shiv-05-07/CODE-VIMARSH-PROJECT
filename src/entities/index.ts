@@ -76,24 +76,3 @@ export interface RoadmapMilestones {
   /** @wixFieldType date */
   completionDate?: Date | string;
 }
-
-
-/**
- * Collection ID: teammembers
- * Interface for TeamMembers
- */
-export interface TeamMembers {
-  _id: string;
-  _createdDate?: Date;
-  _updatedDate?: Date;
-  /** @wixFieldType text */
-  name?: string;
-  /** @wixFieldType text */
-  role?: string;
-  /** @wixFieldType text */
-  bio?: string;
-  /** @wixFieldType image */
-  profilePicture?: string;
-  /** @wixFieldType url */
-  linkedInUrl?: string;
-}
