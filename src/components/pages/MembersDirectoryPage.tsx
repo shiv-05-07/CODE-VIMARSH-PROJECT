@@ -1,46 +1,26 @@
 import { useState, useEffect } from 'react';
+import { BaseCrudService } from '@/integrations';
+import { TeamMembers } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
-import { Github } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabaseClient';
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-  tech_stack: string;
-  github_handle: string;
-}
 
 export default function MembersDirectoryPage() {
-  const [members, setMembers] = useState<Member[]>([]);
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const [members, setMembers] = useState<TeamMembers[]>([]);
+  const [filteredMembers, setFilteredMembers] = useState<TeamMembers[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        if (!supabase) {
-          console.warn('Supabase is not configured');
-          setIsLoading(false);
-          return;
-        }
-
-        const { data, error } = await supabase
-          .from('members')
-          .select('*');
-
-        if (error) {
-          console.error('Error fetching members:', error);
-        } else {
-          setMembers(data || []);
-          setFilteredMembers(data || []);
-        }
+        const { items } = await BaseCrudService.getAll<TeamMembers>('teammembers');
+        setMembers(items);
+        setFilteredMembers(items);
       } catch (error) {
         console.error('Error fetching members:', error);
       } finally {
@@ -56,7 +36,7 @@ export default function MembersDirectoryPage() {
       const searchLower = searchQuery.toLowerCase();
       return (
         (member.name?.toLowerCase().includes(searchLower) || false) ||
-        (member.tech_stack?.toLowerCase().includes(searchLower) || false)
+        (member.role?.toLowerCase().includes(searchLower) || false)
       );
     });
     setFilteredMembers(filtered);
@@ -86,7 +66,7 @@ export default function MembersDirectoryPage() {
             <div className="mb-12">
               <Input
                 type="text"
-                placeholder="Search by name or tech stack..."
+                placeholder="Search by name or role..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full max-w-md bg-charcoal border-neon-cyan/30 text-secondary placeholder:text-secondary/50 focus:border-neon-cyan focus:ring-neon-cyan/20"
@@ -108,27 +88,45 @@ export default function MembersDirectoryPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredMembers.map((member) => (
                   <div
-                    key={member.id}
-                    className="group relative bg-charcoal border border-neon-cyan/30 rounded-xl overflow-hidden hover:border-neon-cyan/60 transition-all duration-300 hover:shadow-lg hover:shadow-neon-cyan/20 p-6"
+                    key={member._id}
+                    className="group relative bg-charcoal border border-neon-cyan/30 rounded-xl overflow-hidden hover:border-neon-cyan/60 transition-all duration-300 hover:shadow-lg hover:shadow-neon-cyan/20"
                   >
+                    {/* Profile Image Container */}
+                    <div className="relative w-full h-64 bg-charcoal/50 overflow-hidden">
+                      {member.profilePicture ? (
+                        <Image
+                          src={member.profilePicture}
+                          alt={member.name || 'Team member'}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          width={400}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-cyan/10 to-neon-cyan/5">
+                          <div className="text-neon-cyan/30 text-4xl font-heading font-bold">
+                            {member.name?.charAt(0).toUpperCase()}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
                     {/* Card Content */}
-                    <div>
+                    <div className="p-6">
                       <h3 className="font-heading text-xl font-bold text-neon-cyan mb-2">
                         {member.name}
                       </h3>
                       <p className="font-paragraph text-sm text-secondary/70 mb-4">
-                        {member.tech_stack}
+                        {member.role}
                       </p>
 
-                      {member.email && (
-                        <p className="font-paragraph text-sm text-secondary/60 mb-6">
-                          {member.email}
+                      {member.bio && (
+                        <p className="font-paragraph text-sm text-secondary/60 mb-6 line-clamp-2">
+                          {member.bio}
                         </p>
                       )}
 
                       {/* Action Buttons */}
                       <div className="flex gap-3">
-                        <Link to={`/members/${member.id}`} className="flex-1">
+                        <Link to={`/members/${member._id}`} className="flex-1">
                           <Button
                             variant="outline"
                             className="w-full border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan/10 hover:border-neon-cyan"
@@ -137,9 +135,9 @@ export default function MembersDirectoryPage() {
                           </Button>
                         </Link>
 
-                        {member.github_handle && (
+                        {member.linkedInUrl && (
                           <a
-                            href={`https://github.com/${member.github_handle.replace('@', '')}`}
+                            href={member.linkedInUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex-shrink-0"
@@ -149,7 +147,7 @@ export default function MembersDirectoryPage() {
                               size="icon"
                               className="border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan/10 hover:border-neon-cyan"
                             >
-                              <Github className="w-4 h-4" />
+                              <Linkedin className="w-4 h-4" />
                             </Button>
                           </a>
                         )}

@@ -7,58 +7,30 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { supabase } from '@/lib/supabaseClient';
 
 export default function JoinPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    tech_stack: '',
-    github_handle: '',
+    expertise: '',
+    message: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError('');
 
-    try {
-      if (!supabase) {
-        setError('Supabase is not configured. Please check your environment variables.');
-        setIsSubmitting(false);
-        return;
-      }
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      const { error: insertError } = await supabase
-        .from('members')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            tech_stack: formData.tech_stack,
-            github_handle: formData.github_handle,
-          },
-        ]);
+    setIsSubmitted(true);
+    setIsSubmitting(false);
+    setFormData({ name: '', email: '', expertise: '', message: '' });
 
-      if (insertError) {
-        setError(insertError.message);
-        setIsSubmitting(false);
-        return;
-      }
-
-      setIsSubmitted(true);
-      setIsSubmitting(false);
-      setFormData({ name: '', email: '', tech_stack: '', github_handle: '' });
-
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-      setIsSubmitting(false);
-    }
+    // Reset success message after 5 seconds
+    setTimeout(() => setIsSubmitted(false), 5000);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -165,18 +137,6 @@ export default function JoinPage() {
                 </motion.div>
               )}
 
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-3"
-                >
-                  <p className="font-paragraph text-red-500">
-                    {error}
-                  </p>
-                </motion.div>
-              )}
-
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <Label htmlFor="name" className="font-paragraph text-white mb-2 block">
@@ -211,14 +171,14 @@ export default function JoinPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="tech_stack" className="font-paragraph text-white mb-2 block">
-                    Tech Stack / Areas of Expertise
+                  <Label htmlFor="expertise" className="font-paragraph text-white mb-2 block">
+                    Areas of Expertise
                   </Label>
                   <Input
-                    id="tech_stack"
-                    name="tech_stack"
+                    id="expertise"
+                    name="expertise"
                     type="text"
-                    value={formData.tech_stack}
+                    value={formData.expertise}
                     onChange={handleChange}
                     className="bg-gray-900 border-neon-cyan/30 text-white focus:border-neon-cyan"
                     placeholder="e.g., Backend Development, System Design, DevOps"
@@ -226,17 +186,17 @@ export default function JoinPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="github_handle" className="font-paragraph text-white mb-2 block">
-                    GitHub Handle
+                  <Label htmlFor="message" className="font-paragraph text-white mb-2 block">
+                    Why do you want to join? *
                   </Label>
-                  <Input
-                    id="github_handle"
-                    name="github_handle"
-                    type="text"
-                    value={formData.github_handle}
+                  <Textarea
+                    id="message"
+                    name="message"
+                    required
+                    value={formData.message}
                     onChange={handleChange}
-                    className="bg-gray-900 border-neon-cyan/30 text-white focus:border-neon-cyan"
-                    placeholder="e.g., @username"
+                    className="bg-gray-900 border-neon-cyan/30 text-white focus:border-neon-cyan min-h-[150px]"
+                    placeholder="Tell us about your interest in deliberate software development and what you hope to contribute..."
                   />
                 </div>
 
@@ -252,7 +212,7 @@ export default function JoinPage() {
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
-                      Join Community
+                      Submit Application
                       <Send className="w-4 h-4" />
                     </span>
                   )}
@@ -260,7 +220,7 @@ export default function JoinPage() {
               </form>
 
               <p className="font-paragraph text-sm text-white/60 mt-6 text-center">
-                Your information will be securely stored and we'll review your application shortly.
+                We review all applications carefully and will respond within 5-7 business days.
               </p>
             </motion.div>
           </div>
