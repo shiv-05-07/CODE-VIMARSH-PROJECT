@@ -25,6 +25,12 @@ export default function MembersDirectoryPage() {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
+        if (!supabase) {
+          console.warn('Supabase is not configured');
+          setIsLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase
           .from('members')
           .select('*');

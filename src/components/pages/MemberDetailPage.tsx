@@ -23,6 +23,12 @@ export default function MemberDetailPage() {
     const fetchMember = async () => {
       if (!id) return;
       try {
+        if (!supabase) {
+          console.warn('Supabase is not configured');
+          setIsLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase
           .from('members')
           .select('*')

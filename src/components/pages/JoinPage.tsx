@@ -26,6 +26,12 @@ export default function JoinPage() {
     setError('');
 
     try {
+      if (!supabase) {
+        setError('Supabase is not configured. Please check your environment variables.');
+        setIsSubmitting(false);
+        return;
+      }
+
       const { error: insertError } = await supabase
         .from('members')
         .insert([
