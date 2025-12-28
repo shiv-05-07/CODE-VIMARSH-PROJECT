@@ -9,6 +9,8 @@ import ProjectsPage from '@/components/pages/ProjectsPage';
 import ProjectDetailPage from '@/components/pages/ProjectDetailPage';
 import RoadmapPage from '@/components/pages/RoadmapPage';
 import JoinPage from '@/components/pages/JoinPage';
+import MembersDirectoryPage from '@/components/pages/MembersDirectoryPage';
+import MemberDetailPage from '@/components/pages/MemberDetailPage';
 import NotFoundPage from '@/components/pages/NotFoundPage';
 
 // Layout component that includes ScrollToTop
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
       {
         path: "join",
         element: <JoinPage />,
+      },
+      {
+        path: "members",
+        element: <MembersDirectoryPage />,
+      },
+      {
+        path: "members/:id",
+        element: <MemberDetailPage />,
       },
       {
         path: "*",
