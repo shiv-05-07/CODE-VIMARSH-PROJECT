@@ -5,6 +5,7 @@ import { TeamMembers } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Linkedin } from 'lucide-react';
+import Footer from '../Footer';
 
 export default function MemberDetailPage() {
   const { id } = useParams<{ id: string }>();
