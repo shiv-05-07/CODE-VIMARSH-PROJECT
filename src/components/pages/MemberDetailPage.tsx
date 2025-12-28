@@ -1,26 +1,39 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { BaseCrudService } from '@/integrations';
-import { TeamMembers } from '@/entities';
-import { Image } from '@/components/ui/image';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Linkedin } from 'lucide-react';
+import { ArrowLeft, Github } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/lib/supabaseClient';
 
-
+interface Member {
+  id: string;
+  name: string;
+  email: string;
+  tech_stack: string;
+  github_handle: string;
+}
 
 export default function MemberDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [member, setMember] = useState<TeamMembers | null>(null);
+  const [member, setMember] = useState<Member | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMember = async () => {
       if (!id) return;
       try {
-        const data = await BaseCrudService.getById<TeamMembers>('teammembers', id);
-        setMember(data);
+        const { data, error } = await supabase
+          .from('members')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) {
+          console.error('Error fetching member:', error);
+        } else {
+          setMember(data);
+        }
       } catch (error) {
         console.error('Error fetching member:', error);
       } finally {
@@ -86,57 +99,37 @@ export default function MemberDetailPage() {
         <div className="w-full bg-charcoal px-4 py-12">
           <div className="max-w-[100rem] mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Profile Image */}
-              <div className="flex items-center justify-center">
-                <div className="relative w-full max-w-md aspect-square rounded-xl overflow-hidden border border-neon-cyan/30">
-                  {member.profilePicture ? (
-                    <Image
-                      src={member.profilePicture}
-                      alt={member.name || 'Team member'}
-                      className="w-full h-full object-cover"
-                      width={500}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-cyan/10 to-neon-cyan/5">
-                      <div className="text-neon-cyan/30 text-8xl font-heading font-bold">
-                        {member.name?.charAt(0).toUpperCase()}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
               {/* Profile Information */}
               <div className="flex flex-col justify-center">
                 <h1 className="font-heading text-5xl font-bold text-neon-cyan mb-2">
                   {member.name}
                 </h1>
                 <p className="font-paragraph text-2xl text-secondary/80 mb-8">
-                  {member.role}
+                  {member.tech_stack}
                 </p>
 
-                {member.bio && (
+                {member.email && (
                   <div className="mb-8">
                     <h2 className="font-heading text-lg font-bold text-secondary mb-3">
-                      About
+                      Contact
                     </h2>
                     <p className="font-paragraph text-base text-secondary/70 leading-relaxed">
-                      {member.bio}
+                      {member.email}
                     </p>
                   </div>
                 )}
 
-                {/* LinkedIn Link */}
-                {member.linkedInUrl && (
+                {/* GitHub Link */}
+                {member.github_handle && (
                   <div className="flex gap-4">
                     <a
-                      href={member.linkedInUrl}
+                      href={`https://github.com/${member.github_handle.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <Button className="bg-neon-cyan text-charcoal hover:bg-neon-cyan/90 gap-2">
-                        <Linkedin className="w-4 h-4" />
-                        View LinkedIn Profile
+                        <Github className="w-4 h-4" />
+                        View GitHub Profile
                       </Button>
                     </a>
                   </div>
