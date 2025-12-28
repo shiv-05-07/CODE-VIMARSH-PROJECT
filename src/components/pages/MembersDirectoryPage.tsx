@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
 import { Linkedin } from 'lucide-react';
+import Footer from '../Footer';
 
 export default function MembersDirectoryPage() {
   const [members, setMembers] = useState<TeamMembers[]>([]);
