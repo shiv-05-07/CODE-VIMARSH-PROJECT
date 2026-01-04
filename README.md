@@ -11,7 +11,7 @@ A modern, full-featured Wix Astro template built with React, TypeScript, and Tai
 - **Wix Integration** - Seamless integration with Wix services and APIs
 - **Modern UI Components** - Radix UI components with custom styling
 - **Authentication** - Built-in member authentication and protected routes
-- **CMS Integration** - Content management system integration
+- **Planned CMS Integration** - Content management system integration(Wix CMS/Supabase) 
 - **Client-side Routing** - React Router for seamless navigation
 - **Responsive Design** - Mobile-first responsive design
 - **Testing** - Vitest testing framework setup
@@ -140,7 +140,6 @@ For support and questions:
 
 - Check the [Wix Developer Documentation](https://dev.wix.com/)
 - Review the [Astro Documentation](https://docs.astro.build/)
-
 
 ---
 
