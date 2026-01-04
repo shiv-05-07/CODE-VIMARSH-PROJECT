@@ -141,6 +141,14 @@ For support and questions:
 - Check the [Wix Developer Documentation](https://dev.wix.com/)
 - Review the [Astro Documentation](https://docs.astro.build/)
 
+## 🔮 Future Enhancements
+- Supabase backend integration
+Role-based authentication (Admin / User)
+- Real-time complaint tracking system
+Admin analytics dashboard
+- CMS-powered dynamic content
+Image uploads and resolution proof system
+
 ---
 
 Built with ❤️ using Wix Vibe, Astro, and modern web technologies.
